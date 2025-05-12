@@ -1,24 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import NotaFiscal from "./pages/notafiscal/NotaFiscal";
+import FormularioNotaFiscal from "./pages/formularionotafiscal/FormularioNotaFiscal";
+import Navbar from "./components/navbar/Navbar";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route path="/notafiscal" element={<NotaFiscal />} />
+        <Route path="/cadastrar" element={<FormularioNotaFiscal />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
