@@ -1,0 +1,20 @@
+{
+  "NotaFiscalId": "NF123456",
+  "CPF_CNPJ": "123.456.789-00",
+  "NomeCliente": "João da Silva",
+  "EnderecoEntrega": "Rua Exemplo, 123",
+  "DataCompra": "2024-05-05",
+  "TotalNota": 150.00,
+  "Itens": [
+    {
+      "CodProduto": "001",
+      "DescrProduto": "Produto A",
+      "ValorUnitario": 50.00
+    },
+    {
+      "CodProduto": "002",
+      "DescrProduto": "Produto B",
+      "ValorUnitario": 100.00
+    }
+  ]
+}

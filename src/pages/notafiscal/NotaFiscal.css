@@ -1,69 +1,125 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f7f7f7;
-  margin: 0;
-  padding: 20px;
-}
-
 .container {
-  max-width: 700px;
-  margin: 0 auto;
-  background-color: white;
-  padding: 25px;
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .titulo-principal {
-  font-size: 28px;
+  text-align: center;
+  font-size: 1.8rem;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
   color: #333;
 }
 
-.subtitulo {
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 20px;
-  margin-bottom: 10px;
+.input-area {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
-input {
-  display: block;
-  width: 100%;
-  margin-bottom: 12px;
-  padding: 10px;
-  font-size: 16px;
+.input-area input {
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border-radius: 6px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  width: 50%;
 }
 
-button {
-  padding: 10px 15px;
-  font-size: 16px;
+.input-area button {
+  padding: 0.6rem 1.2rem;
   background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 5px;
+  font-weight: bold;
+  border-radius: 6px;
   cursor: pointer;
-  margin-top: 10px;
 }
 
-button:hover {
+.input-area button:hover {
   background-color: #0056b3;
 }
 
-#print-button, .print-button {
+.nota-box {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  border: 1px solid #ddd;
+  margin-top: 1rem;
+}
+
+.nota-box h2 {
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  color: #333;
+}
+
+.nota-box p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.nota-box ul {
+  list-style-type: disc;
+  padding-left: 2rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.nota-box li {
+  margin-bottom: 0.3rem;
+  font-size: 0.95rem;
+}
+
+.botoes {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.botoes button {
+  padding: 0.6rem 1.2rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+}
+
+.botoes button:first-child {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.botoes button:first-child:hover {
+  background-color: #138496;
+}
+
+.print-button {
   background-color: #28a745;
-  margin-top: 20px;
+  color: white;
 }
 
-#print-button:hover, .print-button:hover {
-  background-color: #218838;
+.print-button:hover {
+  background-color: #1e7e34;
 }
 
-ul {
-  list-style: disc inside;
-  padding-left: 0;
-  margin-top: 10px;
+@media screen and (max-width: 600px) {
+  .input-area {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .input-area input,
+  .input-area button {
+    width: 100%;
+  }
+
+  .botoes {
+    flex-direction: column;
+  }
 }
