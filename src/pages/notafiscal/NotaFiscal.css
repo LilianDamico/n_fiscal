@@ -1,114 +1,126 @@
+/* Estilo geral */
 .container {
   max-width: 800px;
-  margin: 30px auto;
-  padding: 2rem;
+  margin: 40px auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f8f9fa;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .titulo-principal {
   text-align: center;
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-  color: #333;
+  color: #2c3e50;
+  margin-bottom: 30px;
 }
 
+/* Área de busca */
 .input-area {
   display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
   justify-content: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
 .input-area input {
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
-  border-radius: 6px;
+  flex: 1 1 200px;
+  padding: 10px;
+  font-size: 16px;
   border: 1px solid #ccc;
-  width: 50%;
+  border-radius: 6px;
 }
 
 .input-area button {
-  padding: 0.6rem 1.2rem;
+  padding: 10px 20px;
+  font-weight: bold;
   background-color: #007bff;
   color: white;
   border: none;
-  font-weight: bold;
   border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .input-area button:hover {
   background-color: #0056b3;
 }
 
+/* Caixa da nota */
 .nota-box {
-  background-color: white;
-  border-radius: 8px;
-  padding: 2rem;
-  border: 1px solid #ddd;
-  margin-top: 1rem;
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  border-left: 5px solid #007bff;
+  margin-top: 20px;
 }
 
 .nota-box h2 {
-  margin-bottom: 1rem;
-  font-size: 1.4rem;
-  color: #333;
+  color: #34495e;
+  margin-bottom: 10px;
 }
 
 .nota-box p {
-  margin: 0.5rem 0;
-  font-size: 1rem;
+  margin: 6px 0;
+  font-size: 16px;
 }
 
 .nota-box ul {
-  list-style-type: disc;
-  padding-left: 2rem;
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
+  padding-left: 20px;
 }
 
 .nota-box li {
-  margin-bottom: 0.3rem;
-  font-size: 0.95rem;
+  margin-bottom: 6px;
 }
 
+/* Botões */
 .botoes {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.botoes button {
-  padding: 0.6rem 1.2rem;
-  font-weight: bold;
-  border-radius: 6px;
-  cursor: pointer;
-  border: none;
-}
-
-.botoes button:first-child {
-  background-color: #17a2b8;
-  color: white;
-}
-
-.botoes button:first-child:hover {
-  background-color: #138496;
+  margin-top: 20px;
+  text-align: center;
 }
 
 .print-button {
   background-color: #28a745;
+  padding: 10px 24px;
+  font-weight: bold;
   color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .print-button:hover {
-  background-color: #1e7e34;
+  background-color: #218838;
 }
 
-@media screen and (max-width: 600px) {
+/* Impressão */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .container, .container * {
+    visibility: visible;
+  }
+
+  .input-area,
+  .botoes,
+  .titulo-principal,
+  button {
+    display: none;
+  }
+
+  .nota-box {
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
   .input-area {
     flex-direction: column;
     align-items: stretch;
@@ -117,9 +129,5 @@
   .input-area input,
   .input-area button {
     width: 100%;
-  }
-
-  .botoes {
-    flex-direction: column;
   }
 }

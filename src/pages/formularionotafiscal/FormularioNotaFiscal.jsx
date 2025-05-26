@@ -1,85 +1,165 @@
+import "./FormularioNotaFiscal.css";
 import React, { useState } from "react";
 import axios from "axios";
-import '../notafiscal/NotaFiscal.css';
 
-export default function FormularioNotaFiscal() {
+function FormularioNotaFiscal() {
   const [nota, setNota] = useState({
-    NotaFiscalId: "",
-    NomeCliente: "",
-    CPF_CNPJ: "",
-    EnderecoEntrega: "",
-    DataCompra: "",
-    TotalNota: "",
-    Itens: [],
+    notaFiscalId: "",
+    nomeCliente: "",
+    cpfCnpj: "",
+    enderecoEntrega: "",
+    dataCompra: "",
+    itens: [],
   });
 
-  const [novoItem, setNovoItem] = useState({
-    CodProduto: "",
-    DescrProduto: "",
-    ValorUnitario: "",
+  const [item, setItem] = useState({
+    codProduto: "",
+    nomeProduto: "",
+    quantidade: 0,
+    precoUnitario: 0,
   });
 
-  const adicionarItem = () => {
-    setNota({
-      ...nota,
-      Itens: [...nota.Itens, novoItem]
-    });
-    setNovoItem({ CodProduto: "", DescrProduto: "", ValorUnitario: "" });
-  };
+  const [total, setTotal] = useState(0);
+  const [tributo, setTributo] = useState(0);
 
   const handleChange = (e) => {
     setNota({ ...nota, [e.target.name]: e.target.value });
   };
 
   const handleItemChange = (e) => {
-    setNovoItem({ ...novoItem, [e.target.name]: e.target.value });
+    setItem({ ...item, [e.target.name]: e.target.value });
   };
 
-  const enviarNota = async () => {
+  const adicionarItem = () => {
+    const novoItem = {
+      ...item,
+      quantidade: parseInt(item.quantidade),
+      precoUnitario: parseFloat(item.precoUnitario),
+    };
+    const novosItens = [...nota.itens, novoItem];
+    const novoTotal = novosItens.reduce(
+      (acc, curr) => acc + curr.quantidade * curr.precoUnitario,
+      0
+    );
+    setNota({ ...nota, itens: novosItens });
+    setTotal(novoTotal);
+    setTributo(novoTotal * 0.18);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const payload = {
+      ...nota,
+      totalNota: total,
+    };
+
     try {
-      await axios.post("http://localhost:8081/notas", nota);
-      alert("Nota fiscal enviada com sucesso!");
-      setNota({
-        NotaFiscalId: "",
-        NomeCliente: "",
-        CPF_CNPJ: "",
-        EnderecoEntrega: "",
-        DataCompra: "",
-        TotalNota: "",
-        Itens: [],
-      });
-    } catch (error) {
-      console.error("Erro ao enviar nota:", error);
-      alert("Erro ao enviar nota fiscal.");
+      const response = await axios.post("http://localhost:8081/notas", payload);
+      alert("Nota salva com sucesso!");
+      console.log(response.data);
+    } catch (err) {
+      console.error("Erro ao salvar nota:", err);
+      alert("Erro ao salvar nota.");
     }
   };
 
   return (
-    <div className="container">
-      <h1 className="titulo-principal">Cadastrar Nova Nota Fiscal</h1>
+    <div className="form-container">
+      <h2>Cadastro de Nota Fiscal</h2>
+      <form className="nota-form" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="notaFiscalId"
+          placeholder="ID da Nota"
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="nomeCliente"
+          placeholder="Nome do Cliente"
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="cpfCnpj"
+          placeholder="CPF/CNPJ"
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="enderecoEntrega"
+          placeholder="Endereço de Entrega"
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="date"
+          name="dataCompra"
+          onChange={handleChange}
+          required
+        />
 
-      <input name="NotaFiscalId" placeholder="ID da Nota" value={nota.NotaFiscalId} onChange={handleChange} />
-      <input name="NomeCliente" placeholder="Nome do Cliente" value={nota.NomeCliente} onChange={handleChange} />
-      <input name="CPF_CNPJ" placeholder="CPF/CNPJ" value={nota.CPF_CNPJ} onChange={handleChange} />
-      <input name="EnderecoEntrega" placeholder="Endereço de Entrega" value={nota.EnderecoEntrega} onChange={handleChange} />
-      <input name="DataCompra" type="date" value={nota.DataCompra} onChange={handleChange} />
-      <input name="TotalNota" placeholder="Total (R$)" value={nota.TotalNota} onChange={handleChange} />
+        <h3>Itens</h3>
+        <div className="item-grid">
+          <input
+            type="text"
+            name="codProduto"
+            placeholder="Código"
+            onChange={handleItemChange}
+          />
+          <input
+            type="text"
+            name="nomeProduto"
+            placeholder="Produto"
+            onChange={handleItemChange}
+          />
+          <input
+            type="number"
+            name="quantidade"
+            placeholder="Qtd"
+            onChange={handleItemChange}
+          />
+          <input
+            type="number"
+            name="precoUnitario"
+            placeholder="Preço Unitário"
+            step={0.01}
+            onChange={handleItemChange}
+          />
+        </div>
+        <button type="button" onClick={adicionarItem} className="add-button">
+          Adicionar
+        </button>
 
-      <h3 className="subtitulo">Adicionar Item</h3>
-      <input name="CodProduto" placeholder="Código" value={novoItem.CodProduto} onChange={handleItemChange} />
-      <input name="DescrProduto" placeholder="Descrição" value={novoItem.DescrProduto} onChange={handleItemChange} />
-      <input name="ValorUnitario" placeholder="Valor" value={novoItem.ValorUnitario} onChange={handleItemChange} />
-      <button onClick={adicionarItem}>Adicionar Item</button>
+        <div className="summary">
+          <p><strong>Total:</strong> R$ {total.toFixed(2)}</p>
+          <p>
+            <strong>Informe de Tributos:</strong> ICMS (18%): R$ {tributo.toFixed(2)}
+          </p>
+        </div>
 
-      <ul>
-        {nota.Itens.map((item, index) => (
-          <li key={index}>
-            {item.DescrProduto} - R$ {item.ValorUnitario} ({item.CodProduto})
-          </li>
-        ))}
-      </ul>
+        <button type="submit" className="submit-button">
+          Salvar Nota
+        </button>
+      </form>
 
-      <button className="print-button" onClick={enviarNota}>Enviar Nota</button>
+      <div className="item-list">
+        <h4>Itens Adicionados</h4>
+        <ul>
+          {nota.itens.map((i, idx) => (
+            <li key={idx}>
+              {i.codProduto} - {i.nomeProduto} ({i.quantidade} x R${" "}
+              {i.precoUnitario})
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
+
+export default FormularioNotaFiscal;

@@ -1,42 +1,45 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import './NotaFiscal.css';
 
 export default function NotaFiscal() {
-  const [notaId, setNotaId] = useState("");
+  const [idBusca, setIdBusca] = useState("");
   const [nota, setNota] = useState(null);
-  const [tributo, setTributo] = useState(null);
+  const [erro, setErro] = useState("");
 
   const buscarNota = async () => {
     try {
-      const response = await axios.get(`http://localhost:8081/notas/${notaId}`);
-      setNota(response.data);
-      setTributo(null); // limpa tributo ao buscar nova nota
-    } catch (error) {
-      console.error("Erro ao buscar nota:", error);
-      alert("Nota não encontrada");
+      const response = await axios.get(`http://localhost:8081/notas/${idBusca}`);
+      const data = response.data;
+
+      // Verificação segura dos itens (caso venha como string ou array)
+      let itens = [];
+      if (Array.isArray(data.itens)) {
+        itens = data.itens;
+      } else if (typeof data.itens === "string") {
+        itens = JSON.parse(data.itens);
+      }
+
+      setNota({
+        idNota: data.notaFiscalId,
+        nomeCliente: data.nomeCliente,
+        cpfCnpj: data.cpfCnpj,
+        enderecoEntrega: data.enderecoEntrega,
+        dataCompra: data.dataCompra,
+        totalNota: data.totalNota || 0,
+        totalTributos: data.totalTributos || 0,
+        itens: itens
+      });
+
+      setErro("");
+    } catch (err) {
+      console.error("Erro ao buscar nota:", err);
+      setNota(null);
+      setErro("Nota não encontrada.");
     }
   };
 
-  const calcularTributos = async () => {
-    try {
-      const payload = {
-        ufOrigem: nota.UfOrigem,
-        ufDestino: nota.UfDestino,
-        valorOperacao: nota.TotalNota
-      };
-
-      const response = await axios.post("http://localhost:8081/calcular-tributos", payload);
-      setTributo(response.data.totalTributos);
-    } catch (error) {
-      console.error("Erro ao calcular tributos:", error);
-      alert("Erro ao calcular tributos");
-    }
-  };
-
-  const imprimir = () => {
-    window.print();
-  };
+  const imprimirNota = () => window.print();
 
   return (
     <div className="container">
@@ -44,44 +47,37 @@ export default function NotaFiscal() {
 
       <div className="input-area">
         <input
-          placeholder="Digite o ID da nota"
-          value={notaId}
-          onChange={(e) => setNotaId(e.target.value)}
+          type="text"
+          placeholder="ID da Nota"
+          value={idBusca}
+          onChange={(e) => setIdBusca(e.target.value)}
         />
         <button onClick={buscarNota}>Buscar Nota</button>
       </div>
 
+      {erro && <p style={{ color: "red", textAlign: "center" }}>{erro}</p>}
+
       {nota && (
-        <div className="nota-box" id="nota-visual">
-          <h2>Nota Fiscal: {nota.NotaFiscalId}</h2>
-          <p><strong>Cliente:</strong> {nota.NomeCliente}</p>
-          <p><strong>CPF/CNPJ:</strong> {nota.CPF_CNPJ}</p>
-          <p><strong>Endereço:</strong> {nota.EnderecoEntrega}</p>
-          <p><strong>Data da Compra:</strong> {nota.DataCompra}</p>
-          <p><strong>Total:</strong> R$ {nota.TotalNota}</p>
-          <p><strong>UF Origem:</strong> {nota.UfOrigem}</p>
-          <p><strong>UF Destino:</strong> {nota.UfDestino}</p>
+        <div className="nota-box">
+          <h2>Nota Fiscal: {nota.idNota}</h2>
+          <p><strong>Cliente:</strong> {nota.nomeCliente}</p>
+          <p><strong>CPF/CNPJ:</strong> {nota.cpfCnpj}</p>
+          <p><strong>Endereço:</strong> {nota.enderecoEntrega}</p>
+          <p><strong>Data da Compra:</strong> {nota.dataCompra}</p>
+          <p><strong>Total:</strong> R$ {nota.totalNota.toFixed(2)}</p>
+          <p><strong>Tributos (ICMS 18%):</strong> R$ {nota.totalTributos.toFixed(2)}</p>
 
-          <div>
-            <h3><strong>Itens:</strong></h3>
-            <ul>
-              {nota.Itens.map((item, index) => (
-                <li key={index}>
-                  {item.DescrProduto} - R$ {item.ValorUnitario} ({item.CodProduto})
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {tributo !== null && (
-            <p><strong>Total de Tributos:</strong> R$ {tributo.toFixed(2)}</p>
-          )}
+          <h3>Itens:</h3>
+          <ul>
+            {nota.itens.map((item, index) => (
+              <li key={index}>
+                <strong>{item.codProduto}</strong> - {item.nomeProduto} ({item.quantidade} x R$ {item.precoUnitario.toFixed(2)})
+              </li>
+            ))}
+          </ul>
 
           <div className="botoes">
-            <button onClick={calcularTributos}>Calcular Tributos</button>
-            <button className="print-button" onClick={imprimir}>
-              Imprimir Nota
-            </button>
+            <button className="print-button" onClick={imprimirNota}>Imprimir</button>
           </div>
         </div>
       )}

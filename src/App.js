@@ -1,18 +1,21 @@
+// src/App.js
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import NotaFiscal from "./pages/notafiscal/NotaFiscal";
-import FormularioNotaFiscal from "./pages/formularionotafiscal/FormularioNotaFiscal";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
+import FormularioNotaFiscal from "./pages/formularionotafiscal/FormularioNotaFiscal";
+import NotaFiscal from "./pages/notafiscal/NotaFiscal";
+import ListagemNotasFiscais from "./pages/listagem/ListagemNotasFiscais";
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Navbar />
       <Routes>
+        <Route path="/cadastro" element={<FormularioNotaFiscal />} />
         <Route path="/notafiscal" element={<NotaFiscal />} />
-        <Route path="/cadastrar" element={<FormularioNotaFiscal />} />
+        <Route path="/listagem" element={<ListagemNotasFiscais />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
