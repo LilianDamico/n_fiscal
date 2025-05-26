@@ -1,74 +1,89 @@
 .container {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 40px auto;
-  padding: 30px;
-  background-color: #f9f9f9;
-  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+  background: #fdfdfd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", sans-serif;
 }
 
 .titulo-principal {
   text-align: center;
-  color: #2c3e50;
-  font-size: 28px;
-  font-weight: 600;
+  font-size: 2em;
+  color: #333;
   margin-bottom: 30px;
 }
 
-table {
+.bloco-mensal {
+  margin-bottom: 40px;
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+}
+
+.titulo-mes {
+  font-size: 1.5em;
+  color: #444;
+  margin-bottom: 15px;
+}
+
+.tabela-notas {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
-th,
-td {
-  padding: 12px 16px;
-  border-bottom: 1px solid #ddd;
+.tabela-notas th,
+.tabela-notas td {
+  padding: 10px;
   text-align: left;
-  font-size: 15px;
+  border: 1px solid #ccc;
 }
 
-th {
-  background-color: #f2f2f2;
-  color: #2c3e50;
-  font-weight: 600;
-}
-
-td {
+.tabela-notas th {
+  background-color: #f0f0f0;
   color: #333;
 }
 
-td:last-child {
-  font-weight: bold;
-  color: green;
+.tabela-notas tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.tabela-notas tr:hover {
+  background-color: #f1f9ff;
 }
 
 .totais {
-  display: flex;
-  justify-content: flex-end;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 16px;
+  margin-top: 40px;
+  padding: 20px;
+  border-top: 2px solid #28a745;
+  background: #f9fff9;
+  font-size: 1.2em;
   color: #333;
 }
 
 .totais p {
-  margin: 4px 0;
+  margin: 5px 0;
+  font-weight: bold;
 }
 
+/* Responsivo */
 @media (max-width: 768px) {
+  .tabela-notas th,
+  .tabela-notas td {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .titulo-principal {
+    font-size: 1.6em;
+  }
+
+  .titulo-mes {
+    font-size: 1.3em;
+  }
+
   .container {
-    padding: 20px;
-  }
-
-  th, td {
-    font-size: 14px;
-    padding: 10px 8px;
-  }
-
-  .totais {
-    font-size: 14px;
+    padding: 10px;
   }
 }

@@ -55,12 +55,39 @@ function FormularioNotaFiscal() {
     };
 
     try {
-      const response = await axios.post("http://localhost:8081/notas", payload);
-      alert("Nota salva com sucesso!");
-      console.log(response.data);
+      const existe = await axios.get(`http://localhost:8081/notas/${nota.notaFiscalId}`);
+      if (existe.data) {
+        await axios.put("http://localhost:8081/notas", payload);
+        alert("Nota atualizada com sucesso!");
+      }
+    } catch {
+      try {
+        await axios.post("http://localhost:8081/notas", payload);
+        alert("Nota criada com sucesso!");
+      } catch (err) {
+        console.error("Erro ao salvar nota:", err);
+        alert("Erro ao salvar nota.");
+      }
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:8081/notas/${nota.notaFiscalId}`);
+      alert("Nota deletada com sucesso!");
+      setNota({
+        notaFiscalId: "",
+        nomeCliente: "",
+        cpfCnpj: "",
+        enderecoEntrega: "",
+        dataCompra: "",
+        itens: [],
+      });
+      setTotal(0);
+      setTributo(0);
     } catch (err) {
-      console.error("Erro ao salvar nota:", err);
-      alert("Erro ao salvar nota.");
+      console.error("Erro ao deletar nota:", err);
+      alert("Erro ao deletar nota.");
     }
   };
 
@@ -144,6 +171,9 @@ function FormularioNotaFiscal() {
 
         <button type="submit" className="submit-button">
           Salvar Nota
+        </button>
+        <button type="button" onClick={handleDelete} className="delete-button">
+          Deletar Nota
         </button>
       </form>
 

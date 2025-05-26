@@ -3,7 +3,7 @@ import axios from "axios";
 import "./ListagemNotasFiscais.css";
 
 export default function ListagemNotasFiscais() {
-  const [notas, setNotas] = useState([]);
+  const [notasPorMes, setNotasPorMes] = useState({});
   const [totalGeral, setTotalGeral] = useState(0);
   const [tributosTotais, setTributosTotais] = useState(0);
 
@@ -13,11 +13,25 @@ export default function ListagemNotasFiscais() {
         const response = await axios.get("http://localhost:8081/notas/listar");
         const lista = response.data;
 
-        // Calcula totais com base nos valores já processados no backend
-        const total = lista.reduce((acc, nota) => acc + (nota.totalNota || 0), 0);
-        const tributos = lista.reduce((acc, nota) => acc + (nota.totalTributos || 0), 0);
+        const agrupadas = {};
+        let total = 0;
+        let tributos = 0;
 
-        setNotas(lista);
+        lista.forEach((nota) => {
+          const data = new Date(nota.dataCompra);
+          const chaveMes = data.toLocaleDateString("pt-BR", {
+            month: "2-digit",
+            year: "numeric",
+          });
+
+          if (!agrupadas[chaveMes]) agrupadas[chaveMes] = [];
+          agrupadas[chaveMes].push(nota);
+
+          total += nota.totalNota || 0;
+          tributos += nota.totalTributos || 0;
+        });
+
+        setNotasPorMes(agrupadas);
         setTotalGeral(total);
         setTributosTotais(tributos);
       } catch (err) {
@@ -32,30 +46,37 @@ export default function ListagemNotasFiscais() {
     <div className="container">
       <h1 className="titulo-principal">Notas Fiscais Expedidas</h1>
 
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Cliente</th>
-            <th>CPF/CNPJ</th>
-            <th>Data</th>
-            <th>Total</th>
-            <th>Tributos</th>
-          </tr>
-        </thead>
-        <tbody>
-          {notas.map((nota, index) => (
-            <tr key={index}>
-              <td>{nota.notaFiscalId}</td>
-              <td>{nota.nomeCliente}</td>
-              <td>{nota.cpfCnpj}</td>
-              <td>{nota.dataCompra}</td>
-              <td>R$ {nota.totalNota?.toFixed(2)}</td>
-              <td style={{ color: "green", fontWeight: "bold" }}>R$ {nota.totalTributos?.toFixed(2)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {Object.keys(notasPorMes).map((mes) => (
+        <div key={mes} className="bloco-mensal">
+          <h2 className="titulo-mes">Mês: {mes}</h2>
+          <table className="tabela-notas">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>CPF/CNPJ</th>
+                <th>Data</th>
+                <th>Total</th>
+                <th>Tributos</th>
+              </tr>
+            </thead>
+            <tbody>
+              {notasPorMes[mes].map((nota, idx) => (
+                <tr key={idx}>
+                  <td>{nota.notaFiscalId}</td>
+                  <td>{nota.nomeCliente}</td>
+                  <td>{nota.cpfCnpj}</td>
+                  <td>{nota.dataCompra}</td>
+                  <td>R$ {nota.totalNota?.toFixed(2)}</td>
+                  <td style={{ color: "green", fontWeight: "bold" }}>
+                    R$ {nota.totalTributos?.toFixed(2)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ))}
 
       <div className="totais">
         <p><strong>Total Geral:</strong> R$ {totalGeral.toFixed(2)}</p>
