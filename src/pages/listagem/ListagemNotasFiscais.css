@@ -1,65 +1,105 @@
 .container {
-  max-width: 1200px;
+  max-width: 900px;
   margin: 40px auto;
-  padding: 20px;
-  background: #fdfdfd;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  font-family: "Segoe UI", sans-serif;
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+  font-family: Arial, sans-serif;
 }
 
 .titulo-principal {
   text-align: center;
-  font-size: 2em;
-  color: #333;
+  font-size: 26px;
+  font-weight: bold;
+  color: #2c3e50;
   margin-bottom: 30px;
 }
 
-.bloco-mensal {
-  margin-bottom: 40px;
-  border-top: 1px solid #ddd;
+.mes-container {
+  margin-top: 30px;
+  border-top: 2px solid #2ecc71;
   padding-top: 20px;
 }
 
-.titulo-mes {
-  font-size: 1.5em;
-  color: #444;
+.mes-titulo {
+  font-size: 20px;
+  color: #2ecc71;
+  font-weight: bold;
   margin-bottom: 15px;
 }
 
-.tabela-notas {
+table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
-.tabela-notas th,
-.tabela-notas td {
-  padding: 10px;
+th, td {
+  padding: 10px 12px;
   text-align: left;
-  border: 1px solid #ccc;
+  border-bottom: 1px solid #ecf0f1;
 }
 
-.tabela-notas th {
-  background-color: #f0f0f0;
-  color: #333;
+th {
+  background-color: #f8f9fa;
+  font-weight: 600;
 }
 
-.tabela-notas tr:nth-child(even) {
-  background-color: #fafafa;
+tbody tr:hover {
+  background-color: #f1f8f4;
+  cursor: pointer;
 }
 
-.tabela-notas tr:hover {
-  background-color: #f1f9ff;
+td {
+  font-size: 14px;
+}
+
+td.total,
+td.tributos {
+  font-weight: bold;
+  color: #27ae60;
+}
+
+td.acoes {
+  display: flex;
+  gap: 8px;
+}
+
+.acoes button {
+  padding: 6px 10px;
+  font-size: 13px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.acoes .editar {
+  background-color: #2980b9;
+  color: white;
+}
+
+.acoes .editar:hover {
+  background-color: #1c5980;
+}
+
+.acoes .deletar {
+  background-color: #c0392b;
+  color: white;
+}
+
+.acoes .deletar:hover {
+  background-color: #922b21;
 }
 
 .totais {
-  margin-top: 40px;
-  padding: 20px;
-  border-top: 2px solid #28a745;
-  background: #f9fff9;
-  font-size: 1.2em;
-  color: #333;
+  margin-top: 30px;
+  padding: 15px;
+  background-color: #f9fef9;
+  border: 1px solid #d4edda;
+  border-radius: 8px;
+  text-align: right;
 }
 
 .totais p {
@@ -67,23 +107,22 @@
   font-weight: bold;
 }
 
-/* Responsivo */
-@media (max-width: 768px) {
-  .tabela-notas th,
-  .tabela-notas td {
-    font-size: 14px;
+@media (max-width: 600px) {
+  th, td {
     padding: 8px;
+    font-size: 13px;
   }
 
   .titulo-principal {
-    font-size: 1.6em;
+    font-size: 20px;
   }
 
-  .titulo-mes {
-    font-size: 1.3em;
+  .mes-titulo {
+    font-size: 18px;
   }
 
-  .container {
-    padding: 10px;
+  .acoes button {
+    padding: 4px 6px;
+    font-size: 11px;
   }
 }
